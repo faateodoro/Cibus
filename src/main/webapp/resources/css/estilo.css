@@ -1,0 +1,76 @@
+body{
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 500;
+}
+
+h1{
+    font-size: 40px;
+}
+
+.botao{
+    font-size: 18px;
+    padding: 12px 25px;
+    border-radius: 5px;
+    margin: 5px 0 5px 0;
+    color: white;
+    text-decoration: none;
+}
+
+.botao-adicionar{
+    background: #46bdc6;
+}
+
+.botao-editar{
+    background: #4285f4;
+}
+
+.botao-remover{
+    background: #ea4335;
+    border: none;
+}
+
+.tabela-cozinhas, th, td{
+    margin-top: 30px;
+    border: 2px solid #ccc;
+    border-collapse: collapse;
+    padding: 1px 18px;
+    font-size: 18px;
+}
+
+.th-nome{
+    padding: 10px 200px 10px 15px;
+}
+
+/* adicionar */
+.form-adicionar-cozinha{
+    font-size: 18px;
+    width: 500px;
+}
+
+.form-adicionar-cozinha label{
+    display: block;
+    margin-bottom: 50px;
+}
+
+.input-nome-cozinha{
+    border-radius: 5px;
+    border: 2px solid #ccc;
+    padding: 10px 18px;
+    width: 75%;
+	font-size: 18px;
+}
+
+.form-botoes{
+    margin-right: 25px;
+    float:right;
+}
+
+.botao-salvar{
+    background: #1b9e95;
+    border: none;
+}
+
+.link-cancelar{
+    color: blue;
+    margin-left: 35px;
+}
