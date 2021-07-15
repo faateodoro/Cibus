@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -14,7 +15,7 @@
 <body>
      <main>
          <form class="form-adicionar-cozinha" method="post" action="/admin/salvar">
-             <label>Nome: <input type="text" name="nome" class="input-nome-cozinha"></label>
+             <label>Nome: <input type="text" name="nome" class="input-nome-cozinha"> <form:errors element="div" cssClass="validation-error" path="cozinhaForm.nome" /></label>
              <div class="form-botoes">
                  <input type="submit" class="botao botao-salvar" value="Salvar">
                  <a href="/cozinhas" class="link-cancelar">Cancelar</a>
