@@ -16,29 +16,35 @@
     <main>
         <h1>Tipos de cozinha</h1>
         <a href="/admin/novo" class="botao botao-adicionar">Adicionar</a>
-        <table class="tabela-cozinhas">
-            <thead>
-                <tr>
-                    <th class="th-nome">Nome</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="cozinha" items="${listaCozinhas}">
+        <c:if test="${not empty listaCozinhas}">
+	        	
+	        <table class="tabela-cozinhas">
+	            <thead>
 	                <tr>
-	                    <td class="nome-cozinha">${cozinha.nome}</td>
-	                    <td><a href="/admin/editar/${cozinha.id}" class="botao botao-editar">Editar</a></td>
-	                    <td>
-		                    <form action="/admin/excluir" method="post">
-		                    	<input type="hidden" value="${cozinha.id}" name="id">
-		                    	<input type="submit" class="botao botao-remover" value="Remover">
-		                    </form>
-						</td>
+	                    <th class="th-nome">Nome</th>
+	                    <th></th>
+	                    <th></th>
 	                </tr>
-                </c:forEach>
-            </tbody>
-        </table>
+	            </thead>
+	            <tbody>
+	                <c:forEach var="cozinha" items="${listaCozinhas}">
+		                <tr>
+		                    <td class="nome-cozinha">${cozinha.nome}</td>
+		                    <td><a href="/admin/editar/${cozinha.id}" class="botao botao-editar">Editar</a></td>
+		                    <td>
+			                    <form action="/admin/excluir" method="post">
+			                    	<input type="hidden" value="${cozinha.id}" name="id">
+			                    	<input type="submit" class="botao botao-remover" value="Remover">
+			                    </form>
+							</td>
+		                </tr>
+	                </c:forEach>
+	            </tbody>
+	        </table>
+        </c:if>
+        <c:if test="${empty listaCozinhas}">
+        	<h2>Não existe nenhuma cozinha cadastrada.</h2>
+        </c:if>
     </main>
 </body>
 </html>

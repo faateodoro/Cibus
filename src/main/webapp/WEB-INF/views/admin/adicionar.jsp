@@ -19,7 +19,7 @@
              <label>Nome: <input type="text" name="nome" class="input-nome-cozinha"> 
 	             <span class="validation-error">
 					<form:errors path="cozinhaForm.nome" />
-		            <c:out value="${erro }"></c:out>
+		            <c:out value="${erro}" />
 	             </span>
              </label>
              <div class="form-botoes">
