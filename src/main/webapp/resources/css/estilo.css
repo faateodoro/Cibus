@@ -74,3 +74,28 @@ h1{
     color: blue;
     margin-left: 35px;
 }
+
+.validation-error{
+	display: block;
+	color: red;
+	font-size: 14px;
+	text-align: right;
+	padding: 15px 25px 0 0;
+}
+
+/* Página de erros */
+
+.container-erro{
+	width: 900px;
+	text-align: center;
+}
+
+.container-erro .descricao-erro{
+	color: red;
+	margin:35px;
+}
+
+.botao-listagem{
+    background: #1b9e95;
+    border: none;
+}

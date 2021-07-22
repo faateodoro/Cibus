@@ -10,6 +10,10 @@ public class CozinhaForm {
     @NotBlank(message = "{cozinha.nome.obrigatorio}")
     @Size(max=50, message = "{cozinha.nome.maximo}")
     private String nome;
+    
+    public CozinhaForm(String nome) {
+    	this.nome = nome;
+    }
 
     public String getNome() {
         return nome;
