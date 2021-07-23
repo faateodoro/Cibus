@@ -28,7 +28,7 @@ public class Cozinha {
 	public Cozinha(String nome){
 		Assert.hasText(nome, "O campo nome é obrigatório!");
 		Assert.isTrue(nome.length()<=50, "O campo nome pode ter no máximo 50 caractéres!");
-		this.nome = nome;
+		this.setNome(nome);
 	}
 	
 	public Long getId() {
@@ -40,7 +40,7 @@ public class Cozinha {
 	}
 	
 	public void setNome(String nome) {
-		this.nome = nome;
+		this.nome = nome.substring(0, 1).toUpperCase() + nome.substring(1).toLowerCase();
 	}
 
 	@Override

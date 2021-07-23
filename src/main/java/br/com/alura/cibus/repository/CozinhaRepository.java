@@ -13,4 +13,7 @@ public interface CozinhaRepository extends JpaRepository<Cozinha, Long> {
 
 	List<Cozinha> findByOrderByNome();
 	
+	boolean existsByNomeIgnoreCase(String nome);
+	
+	boolean existsByNomeIgnoreCaseAndIdNot(String nome, Long id);
 }

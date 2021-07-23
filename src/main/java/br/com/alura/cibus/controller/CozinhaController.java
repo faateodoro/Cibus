@@ -37,46 +37,42 @@ public class CozinhaController implements ErrorController {
 
     @GetMapping("/cozinhas")
     public String listar(Model model) {
-    	
         List<Cozinha> listaCozinhas = this.cozinhaRepository.findByOrderByNome();
         model.addAttribute("listaCozinhas", listaCozinhas);
 
-        return "/listagem";
+        return "/cozinhas/listagem";
     }
 
-    @GetMapping("/admin/novo")
+    @GetMapping("/admin/cozinhas/novo")
     public String adicionar() {
-        return "/admin/adicionar";
+        return "/admin/cozinhas/adicionar";
     }
 
-    @PostMapping("/admin/salvar")
+    @PostMapping("/admin/cozinhas/salvar")
     public String salvar(@Valid CozinhaForm form, BindingResult result, Model model) {
-    	if (result.hasFieldErrors("nome")) return "/admin/adicionar";
+    	if (result.hasFieldErrors("nome")) return "/admin/cozinhas/adicionar";
         
-        Optional<Cozinha> cozinhaJaExiste = this.cozinhaRepository.findByNome(form.getNome());
-        
-        if (cozinhaJaExiste.isPresent()) {
+        if (cozinhaRepository.existsByNomeIgnoreCase(form.getNome())) {
         	model.addAttribute("erro", "Já existe uma cozinha com esse nome.");
-        	return "/admin/adicionar";
+        	return "/admin/cozinhas/adicionar";
         }
         
         this.cozinhaRepository.save(form.toCozinha());
         return "redirect:/cozinhas";
     }
     
-    @GetMapping("/admin/editar/{id}")
+    @GetMapping("/admin/cozinhas/editar/{id}")
     public String editar(@PathVariable String id, Model model) {
-    	
     	Optional<Cozinha> cozinha = this.cozinhaRepository.findById(Long.parseLong(id));
     	if(cozinha.isEmpty()) {
     		throw new NotFoundException("Ocorreu um erro. A cozinha não foi encontrada.");
     	}
     	
     	model.addAttribute("cozinha", cozinha.get());
-    	return "/admin/editar";
+    	return "/admin/cozinhas/editar";
     }
 
-    @PostMapping("/admin/salvar/{id}")
+    @PostMapping("/admin/cozinhas/salvar/{id}")
     public String salvar(@PathVariable("id") String id, @Valid CozinhaForm form, BindingResult result, Model model) {
     	if(result.hasFieldErrors("nome")) return editar(id, model);
     	
@@ -85,9 +81,7 @@ public class CozinhaController implements ErrorController {
         
         Cozinha cozinha = cozinhaPorId.get();
         
-        Optional<Cozinha> nomeJaExiste = this.cozinhaRepository.findByNome(form.getNome());
-        if (nomeJaExiste.isPresent()) {
-        	
+        if (cozinhaRepository.existsByNomeIgnoreCaseAndIdNot(form.getNome(), Long.parseLong(id))) {
         	model.addAttribute("erro", "Já existe uma cozinha com esse nome.");
         	return editar(id, model);
         }
@@ -97,14 +91,13 @@ public class CozinhaController implements ErrorController {
     	return "redirect:/cozinhas";
     }
 
-    @PostMapping("/admin/excluir")
+    @PostMapping("/admin/cozinhas/excluir")
     public String excluir(Long id) {
         Optional<Cozinha> cozinha = this.cozinhaRepository.findById(id);
         if (cozinha.isPresent()) this.cozinhaRepository.delete(cozinha.get());
 
         return "redirect:/cozinhas";
     }
-
     
     @ExceptionHandler({NotFoundException.class})
     public String handleException(Model model, RuntimeException e) {

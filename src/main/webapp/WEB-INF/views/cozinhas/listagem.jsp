@@ -15,7 +15,7 @@
 <body>
     <main>
         <h1>Tipos de cozinha</h1>
-        <a href="/admin/novo" class="botao botao-adicionar">Adicionar</a>
+        <a href="/admin/cozinhas/novo" class="botao botao-adicionar">Adicionar</a>
         <c:if test="${not empty listaCozinhas}">
 	        	
 	        <table class="tabela-cozinhas">
@@ -30,9 +30,9 @@
 	                <c:forEach var="cozinha" items="${listaCozinhas}">
 		                <tr>
 		                    <td class="nome-cozinha">${cozinha.nome}</td>
-		                    <td><a href="/admin/editar/${cozinha.id}" class="botao botao-editar">Editar</a></td>
+		                    <td><a href="/admin/cozinhas/editar/${cozinha.id}" class="botao botao-editar">Editar</a></td>
 		                    <td>
-			                    <form action="/admin/excluir" method="post">
+			                    <form action="/admin/cozinhas/excluir" method="post">
 			                    	<input type="hidden" value="${cozinha.id}" name="id">
 			                    	<input type="submit" class="botao botao-remover" value="Remover">
 			                    </form>

@@ -15,7 +15,7 @@
 </head>
 <body>
      <main>
-         <form class="form-adicionar-cozinha" method="post" action="/admin/salvar/${cozinha.id}">
+         <form class="form-adicionar-cozinha" method="post" action="/admin/cozinhas/salvar/${cozinha.id}">
              <label>Nome: <input type="text" value="${cozinha.nome}" name="nome" class="input-nome-cozinha">
 	             <span class="validation-error">
 					<form:errors path="cozinhaForm.nome" />

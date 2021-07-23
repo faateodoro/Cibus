@@ -60,6 +60,11 @@ h1{
 	font-size: 18px;
 }
 
+.info-nome-cozinha{
+	color: #aaa;
+	font-size: 12px;
+}
+
 .form-botoes{
     margin-right: 25px;
     float:right;

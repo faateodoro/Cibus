@@ -14,19 +14,22 @@
     <title>Cibus - Adicionar</title>
 </head>
 <body>
-     <main>
-         <form class="form-adicionar-cozinha" method="post" action="/admin/salvar">
-             <label>Nome: <input type="text" name="nome" class="input-nome-cozinha"> 
-	             <span class="validation-error">
-					<form:errors path="cozinhaForm.nome" />
-		            <c:out value="${erro}" />
-	             </span>
-             </label>
-             <div class="form-botoes">
-                <input type="submit" class="botao botao-salvar" value="Salvar">
-                <a href="/cozinhas" class="link-cancelar">Cancelar</a>
-             </div>
-         </form>
-     </main>
+	<main>
+		<form class="form-adicionar-cozinha" method="post" action="/admin/cozinhas/salvar">
+			<label>Nome: <input type="text" name="nome" class="input-nome-cozinha" 
+					placeholder="Coloque aqui o nome da cozinha."> 
+			<span class="info-nome-cozinha">*Para manter o padrão dos dados e evitar duplicações, os dados 
+					serão armazenados com a primeira letra maiúscula e as restantes em minúsculas.</span>
+			<span class="validation-error">
+				<form:errors path="cozinhaForm.nome" />
+				<c:out value="${erro}" />
+			</span>
+			</label>
+			<div class="form-botoes">
+				<input type="submit" class="botao botao-salvar" value="Salvar">
+				<a href="/cozinhas" class="link-cancelar">Cancelar</a>
+			</div>
+		</form>
+	</main>
 </body>
 </html>
