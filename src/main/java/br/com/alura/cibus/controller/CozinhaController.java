@@ -1,28 +1,24 @@
 package br.com.alura.cibus.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.com.alura.cibus.controller.dto.CozinhaForm;
-import br.com.alura.cibus.exceptions.NotFoundException;
 import br.com.alura.cibus.modelo.Cozinha;
 import br.com.alura.cibus.repository.CozinhaRepository;
 
 @Controller
-public class CozinhaController implements ErrorController {
+public class CozinhaController {
 
     private CozinhaRepository cozinhaRepository;
 
@@ -30,11 +26,6 @@ public class CozinhaController implements ErrorController {
         this.cozinhaRepository = cozinhaRepository;
     }
     
-    @RequestMapping("/error")
-    public String handleError() {
-    	return "/error/not-found";
-    }
-
     @GetMapping("/cozinhas")
     public String listar(Model model) {
         List<Cozinha> listaCozinhas = this.cozinhaRepository.findByOrderByNome();
@@ -63,25 +54,27 @@ public class CozinhaController implements ErrorController {
     
     @GetMapping("/admin/cozinhas/editar/{id}")
     public String editar(@PathVariable String id, Model model) {
-    	Optional<Cozinha> cozinha = this.cozinhaRepository.findById(Long.parseLong(id));
-    	if(cozinha.isEmpty()) {
-    		throw new NotFoundException("Ocorreu um erro. A cozinha não foi encontrada.");
-    	}
+    	Cozinha cozinha = this.cozinhaRepository.findById(Long.parseLong(id))
+    			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, 
+    					"Ocorreu um erro. A cozinha não foi encontrada"));
     	
-    	model.addAttribute("cozinha", cozinha.get());
+    	model.addAttribute("cozinha", cozinha);
     	return "/admin/cozinhas/editar";
     }
 
     @PostMapping("/admin/cozinhas/salvar/{id}")
-    public String salvar(@PathVariable("id") String id, @Valid CozinhaForm form, BindingResult result, Model model) {
+    public String salvar(@PathVariable("id") String id, @Valid CozinhaForm form, 
+    		BindingResult result, Model model) {
     	if(result.hasFieldErrors("nome")) return editar(id, model);
     	
-        Optional<Cozinha> cozinhaPorId = this.cozinhaRepository.findById(Long.parseLong(id));
-        if(cozinhaPorId.isEmpty()) throw new NotFoundException("Ocorreu um erro. A cozinha não foi encontrada.");
+        Cozinha cozinhaPorId = this.cozinhaRepository.findById(Long.parseLong(id))
+        		.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, 
+        				"Ocorreu um erro. A cozinha não foi encontrada."));
         
-        Cozinha cozinha = cozinhaPorId.get();
+        Cozinha cozinha = cozinhaPorId;
         
-        if (cozinhaRepository.existsByNomeIgnoreCaseAndIdNot(form.getNome(), Long.parseLong(id))) {
+        if (cozinhaRepository.existsByNomeIgnoreCaseAndIdNot(form.getNome(), 
+        		Long.parseLong(id))) {
         	model.addAttribute("erro", "Já existe uma cozinha com esse nome.");
         	return editar(id, model);
         }
@@ -93,15 +86,11 @@ public class CozinhaController implements ErrorController {
 
     @PostMapping("/admin/cozinhas/excluir")
     public String excluir(Long id) {
-        Optional<Cozinha> cozinha = this.cozinhaRepository.findById(id);
-        if (cozinha.isPresent()) this.cozinhaRepository.delete(cozinha.get());
+    	this.cozinhaRepository.findById(id)
+    			.ifPresentOrElse(this.cozinhaRepository::delete,
+				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, 
+						"Ocorreu um erro. A cozinha não foi encontrada."));
 
         return "redirect:/cozinhas";
-    }
-    
-    @ExceptionHandler({NotFoundException.class})
-    public String handleException(Model model, RuntimeException e) {
-    	model.addAttribute("erro", e.getMessage());
-    	return "/error/not-found";
     }
 }
