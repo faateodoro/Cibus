@@ -1,54 +1,57 @@
 package br.com.alura.cibus.repository;
 
 import br.com.alura.cibus.modelo.Cozinha;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(value = SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")
-public class CozinhaRepositoryTest {
+class CozinhaRepositoryTest {
 
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
 
-	private static final int QUANTIDADE_DE_COZINHAS = 5;
-	
+	@Autowired
+	private TestEntityManager entityManager;
+
 	@Test
-	public void dadoNomeExistenteNoBancoDeveRetornarCozinha() {
-		String nomeCozinhaJaponesa = "Japonesa";
-		Optional<Cozinha> cozinhaJaponesa = cozinhaRepository.findByNome(nomeCozinhaJaponesa);
-		
-		String nomeCozinhaMexicana = "Mexicana";
-		Optional<Cozinha> cozinhaMexicana = cozinhaRepository.findByNome(nomeCozinhaMexicana);
-		
+	void dado_nome_existente_no_banco_deve_retornar_cozinha() {
+		entityManager.persist(new Cozinha("Japonesa"));
+
+		Optional<Cozinha> cozinhaJaponesa = cozinhaRepository.findByNome("Japonesa");
+
 		assertTrue(cozinhaJaponesa.isPresent());
-		assertEquals(nomeCozinhaJaponesa, cozinhaJaponesa.get().getNome());
-		assertTrue(cozinhaMexicana.isEmpty());
+		assertEquals("Japonesa", cozinhaJaponesa.get().getNome());
 	}
-	
+
 	@Test
-	public void deveRetornarListaDeCozinhas() {
+	void dado_nome_nao_existente_no_banco_nao_deve_retornar_cozinha() {
+		Optional<Cozinha> cozinha = cozinhaRepository.findByNome("Nome que não existe");
+		assertTrue(cozinha.isEmpty());
+	}
+
+	@Test
+	 void deve_retornar_lista_de_cozinhas_ordenado_por_nome() {
 		List<Cozinha> listaCozinhas = cozinhaRepository.findByOrderByNome();
-		
-		char primeiro =  listaCozinhas.get(0).getNome().charAt(0);
-		char ultimo = listaCozinhas.get(listaCozinhas.size() - 1).getNome().charAt(0);
-		
-		assertNotNull(listaCozinhas);
-		assertEquals(QUANTIDADE_DE_COZINHAS, listaCozinhas.size());
-		assertTrue(primeiro < ultimo);
-		assertFalse(ultimo < primeiro);
+
+		assertEquals(4, listaCozinhas.size());
+
+		assertThat(listaCozinhas)
+				.hasSize(4)
+				.extracting(Cozinha::getNome)
+				.containsExactly("Árabe", "Baiana", "Chinesa", "Italiana");
 	}
 	
 	@Test
