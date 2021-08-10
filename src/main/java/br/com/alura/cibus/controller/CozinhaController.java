@@ -20,7 +20,7 @@ import br.com.alura.cibus.repository.CozinhaRepository;
 @Controller
 public class CozinhaController {
 
-    private CozinhaRepository cozinhaRepository;
+    private final CozinhaRepository cozinhaRepository;
 
     public CozinhaController(CozinhaRepository cozinhaRepository) {
         this.cozinhaRepository = cozinhaRepository;
@@ -31,7 +31,7 @@ public class CozinhaController {
         List<Cozinha> listaCozinhas = this.cozinhaRepository.findByOrderByNome();
         model.addAttribute("listaCozinhas", listaCozinhas);
 
-        return "/cozinhas/listagem";
+        return "cozinhas/listagem";
     }
 
     @GetMapping("/admin/cozinhas/novo")
@@ -41,11 +41,11 @@ public class CozinhaController {
 
     @PostMapping("/admin/cozinhas/salvar")
     public String salvar(@Valid CozinhaForm form, BindingResult result, Model model) {
-    	if (result.hasFieldErrors("nome")) return "/admin/cozinhas/adicionar";
+    	if (result.hasFieldErrors("nome")) return "admin/cozinhas/adicionar";
         
         if (cozinhaRepository.existsByNomeIgnoreCase(form.getNome())) {
         	model.addAttribute("erro", "Já existe uma cozinha com esse nome.");
-        	return "/admin/cozinhas/adicionar";
+        	return "admin/cozinhas/adicionar";
         }
         
         this.cozinhaRepository.save(form.toCozinha());
@@ -59,7 +59,7 @@ public class CozinhaController {
     					"Ocorreu um erro. A cozinha não foi encontrada"));
     	
     	model.addAttribute("cozinha", cozinha);
-    	return "/admin/cozinhas/editar";
+    	return "admin/cozinhas/editar";
     }
 
     @PostMapping("/admin/cozinhas/salvar/{id}")
@@ -86,10 +86,7 @@ public class CozinhaController {
 
     @PostMapping("/admin/cozinhas/excluir")
     public String excluir(Long id) {
-    	this.cozinhaRepository.findById(id)
-    			.ifPresentOrElse(this.cozinhaRepository::delete,
-				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, 
-						"Ocorreu um erro. A cozinha não foi encontrada."));
+    	this.cozinhaRepository.findById(id).ifPresent(this.cozinhaRepository::delete);
 
         return "redirect:/cozinhas";
     }

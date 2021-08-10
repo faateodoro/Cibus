@@ -11,6 +11,6 @@ public class ErrorHandler implements ErrorController {
 	@RequestMapping("/error")
 	public String errorHandler(ModelMap model, Exception e) {
 		model.addAttribute("erro", e.getMessage());
-		return "/error/not-found";
+		return "error/not-found";
 	}
 }
