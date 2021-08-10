@@ -9,5 +9,4 @@ public class CibusScubaApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CibusScubaApplication.class, args);
 	}
-
 }
