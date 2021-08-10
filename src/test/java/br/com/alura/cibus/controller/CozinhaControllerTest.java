@@ -138,8 +138,6 @@ public class CozinhaControllerTest {
 		this.mockMvc.perform(get(uri))
 				.andExpect(result -> assertTrue(result
 						.getResolvedException() instanceof  ResponseStatusException))
-				.andExpect((result -> assertTrue(result.getResolvedException()
-						.getMessage().contains("Ocorreu um erro. A cozinha não foi encontrada"))))
 				.andExpect(status().is(404));
 	}
 

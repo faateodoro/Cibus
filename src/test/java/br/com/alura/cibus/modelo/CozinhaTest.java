@@ -7,25 +7,23 @@ import static org.junit.jupiter.api.Assertions.*;
 class CozinhaTest {
 
 	@Test
-	void deveriaFalharCasoNomeEstiverVazio() {
-		Exception ex = assertThrows(Exception.class,() -> new Cozinha("Esse texto aqui deve conter ao menos 50 caracteres."));
-		assertTrue(ex.getMessage().contains("O campo nome pode ter no máximo 50 caractéres!"));
+	void deveria_falhar_caso_nome_estiver_vazio() {
+		assertThrows(IllegalArgumentException.class,
+				() -> new Cozinha("Esse texto aqui deve conter ao menos 50 caracteres."));
 	}
 	
 	@Test
-	void deveriaFalharCasoNomeSejaVazio() {
-		Exception ex = assertThrows(Exception.class, () -> new Cozinha(""));
-		assertTrue(ex.getMessage().contains("O campo nome é obrigatório!"));
+	void deveria_falhar_caso_nome_seja_vazio() {
+		assertThrows(IllegalArgumentException.class, () -> new Cozinha(""));
 	}
 	
 	@Test
-	void deveriaFalharCasoNomeSejaNulo() {
-		Exception ex = assertThrows(Exception.class, () -> new Cozinha(null));
-		assertTrue(ex.getMessage().contains("O campo nome é obrigatório!"));
+	void deveria_falhar_caso_nome_seja_nulo() {
+		assertThrows(IllegalArgumentException.class, () -> new Cozinha(null));
 	}
 	
 	@Test
-	void deveriaTerSucessoAoCriarCozinhaComUmNomeValido() {
+	void deveria_ter_sucesso_ao_criar_cozinha_com_um_nome_valido() {
 		Cozinha cozinha = new Cozinha("Espanhola");
 		assertEquals("Espanhola", cozinha.getNome());
 	}
